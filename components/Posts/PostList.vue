@@ -1,28 +1,36 @@
 <template>
 	<section class="post-list">
-		<PostPreview v-bind:key="post.id" v-for="post of posts" :postInfo="post" />
+		<PostPreview
+			v-for="post of posts"
+			:is-admin="isAdmin"
+			:key="post.id"
+			:postInfo="post"
+		/>
 	</section>
 </template>
 
 <script>
-    import PostPreview from '~/components/Posts/PostPreview'
+import PostPreview from '~/components/Posts/PostPreview'
 
 export default {
 	components: {
 		PostPreview,
 	},
-	data: () => ({
-		posts: [
-			{
-				id: '1',
-				title: 'Hello there!',
-				previewText:
-					'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quos.',
-				thumbnail:
-					'https://blog.vulpi.com.br/wp-content/uploads/2020/04/apple-coffee-computer-desk-356056-1024x680.jpg',
-			},
-		],
-	}),
+
+	props: {
+		isAdmin: {
+			type: Boolean,
+			default: false,
+		},
+
+		posts: {
+			type: Array,
+			required: true,
+			default: [],
+		},
+	},
+
+	data: () => ({}),
 }
 </script>
 
@@ -35,5 +43,4 @@ export default {
 	align-items: center;
 	justify-content: center;
 }
-
 </style>

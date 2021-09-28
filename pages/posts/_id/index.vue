@@ -1,20 +1,44 @@
 <template>
 	<div class="single-post-page">
 		<section class="post">
-			<h1>Title of the post</h1>
+			<h1>{{ loadedPost. title }}</h1>
 			<div class="post-details">
-				<div>Last updated on XXX</div>
-				<div>Written by NAME</div>
+				<div>Last updated on {{ loadedPost.updatedDate }}</div>
+				<div>Written by {{ loadedPost.author }}</div>
 			</div>
 
-			<p>content of the post</p>
+			<p>{{ loadedPost.content }}</p>
 		</section>
 
 		<section class="feedback">
-			<p>Teste</p>
+			<p>Feedback for the post</p>
 		</section>
 	</div>
 </template>
+
+<script>
+export default {
+	asyncData(context, callback) {
+		setTimeout(() => {
+			callback(null, {
+				loadedPost: {
+					id: '1',
+					title: 'Hello there!',
+					previewText:
+						'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quos.',
+
+					author: 'Adriano',
+					updatedDate: new Date(),
+					content: 'So, writing this now, it really got me thinking on how people still think fascism is a left wing ideia',
+
+					thumbnail:
+						'https://blog.vulpi.com.br/wp-content/uploads/2020/04/apple-coffee-computer-desk-356056-1024x680.jpg',
+				},
+			})
+		})
+	},
+}
+</script>
 
 <style>
 .single-post-page {
