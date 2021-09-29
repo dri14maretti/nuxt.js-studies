@@ -1,9 +1,9 @@
 <template>
-  <button
+  <v-btn
     class="button"
     :class="btnStyle"
     v-bind="$attrs"
-    v-on="$listeners"><slot /></button>
+    v-on="$listeners"><slot /></v-btn>
 </template>
 
 <script>
@@ -23,7 +23,6 @@ export default {
 .button {
   font: inherit;
   background-color: black;
-  color: white;
   padding: 5px;
   cursor: pointer;
   border: 1px solid black;
@@ -31,8 +30,8 @@ export default {
 
 .button:hover,
 .button:active {
-  background-color: rgb(51, 51, 51);
-  border: 1px solid black;
+  background-color: rgb(0, 200, 0);
+  border: 1px solid transparent;
 }
 
 .inverted {
@@ -50,8 +49,7 @@ export default {
 
 .cancel {
   background-color: red;
-  color: white;
-  border: 1px solid transparent;
+  border: 1px solid black;
 }
 
 .cancel:hover,

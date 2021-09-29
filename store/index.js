@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const createStore = () => {
 	return new Vuex.Store({
@@ -9,34 +10,56 @@ const createStore = () => {
 			setPosts(state, posts) {
 				state.loadedPosts = posts
 			},
+			addPost(state, post) {
+				state.loadedPosts.push(post)
+			},
+			editPost(state, editedPost) {
+				const postIndex = state.loadedPosts.findIndex((post) => post.id === editedPost.id)
+				state.loadedPosts[postIndex] = editedPost
+			},
 		},
 		actions: {
 			async nuxtServerInit(vuexContext, context) {
-				return new Promise((resolve, reject) => {
-					setTimeout(() => {
-						vuexContext.commit('setPosts', [
-							{
-								id: '1',
-								title: 'Hello there!',
-								previewText:
-									'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quos.',
-								thumbnail:
-									'https://blog.vulpi.com.br/wp-content/uploads/2020/04/apple-coffee-computer-desk-356056-1024x680.jpg',
-							},
-							{
-								id: '2',
-								title: 'Hello there for the second time!',
-								previewText: 'Teste de previewText',
-								thumbnail:
-									'https://blog.vulpi.com.br/wp-content/uploads/2020/04/apple-coffee-computer-desk-356056-1024x680.jpg',
-							},
-						])
-                        resolve();
-					}, 1500)
-				})
+				return axios
+					.get('https://nuxt-blog-ed505-default-rtdb.firebaseio.com/posts.json')
+					.then((reponse) => {
+						const responseArray = []
+						for(const key in reponse.data) {
+							responseArray.push({... reponse.data[key], id: key})
+						}
+						vuexContext.commit('setPosts', responseArray)
+					})
+					.catch((e) => console.log(e))
 			},
 			setPosts(vuexContext, posts) {
 				vuexContext.commit('setPosts', posts)
+			},
+			async addPost(vuexContext, post) {
+				const createdPost = { ...post, updatedDate: new Date().toLocaleDateString() }
+				return axios
+				.post(
+					'https://nuxt-blog-ed505-default-rtdb.firebaseio.com/posts.json',
+					createdPost
+				)
+				.then((result) => {
+					vuexContext.commit('addPost', { ...createdPost, id: result.data.name })
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+			},
+			async editPost(vuexContext, editedPost) {
+				return axios
+				.put(
+					`https://nuxt-blog-ed505-default-rtdb.firebaseio.com/posts/${editedPost.id}.json`,
+					editedPost
+				)
+				.then((response) => {
+					vuexContext.commit('editPost', editedPost)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
 			},
 		},
 		getters: {

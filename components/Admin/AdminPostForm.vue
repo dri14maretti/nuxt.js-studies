@@ -1,10 +1,12 @@
 <template>
 	<form @submit.prevent="onSave">
-		<AppControlInput v-model="editedPost.author">Author Name</AppControlInput>
+		<AppControlInput v-model="editedPost.author"
+			>Author Name</AppControlInput
+		>
 
 		<AppControlInput v-model="editedPost.title">Title</AppControlInput>
 
-		<AppControlInput v-model="editedPost.thumbnailLink"
+		<AppControlInput v-model="editedPost.thumbnail"
 			>Thumbnail Link</AppControlInput
 		>
 
@@ -37,6 +39,7 @@ export default {
 		post: {
 			type: Object,
 			required: false,
+			default: {},
 		},
 	},
 
@@ -45,17 +48,29 @@ export default {
 			editedPost: this.post
 				? { ...this.post }
 				: {
-                    author: '',
-                    title: '',
-                    thumbnailLink: '',
-                    content: '',
+						author: '',
+						title: '',
+						thumbnail: '',
+						content: '',
+						previewText: '',
 				  },
 		}
 	},
 
 	methods: {
 		onSave() {
-			console.log(this.editedPost)
+			if (this.editedPost.content.length > 100)
+				this.editedPost.previewText = this.editedPost.content.substring(
+					0,
+					100
+				) + '...';
+			else
+				this.editedPost.previewText =
+					this.editedPost.content.substring(
+						0,
+						(this.editedPost.content.length - 1) / 2
+					) + '...';
+			this.$emit('submit', this.editedPost)
 		},
 
 		onCancel() {
