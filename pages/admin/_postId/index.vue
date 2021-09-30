@@ -8,20 +8,18 @@
 
 <script>
 import AdminPostForm from '@/components/Admin/AdminPostForm'
-import axios from 'axios'
 export default {
 	layout: 'admin',
+	middleware: ['check-auth', 'auth'],
 	components: {
 		AdminPostForm,
 	},
 
 	asyncData(context) {
-		return axios
-			.get(
-				`https://nuxt-blog-ed505-default-rtdb.firebaseio.com/posts/${context.params.postId}.json`
-			)
-			.then((response) => ({
-				loadedPost: {...response.data, id: context.params.postId},
+		return context.app.$axios
+			.$get(`/posts/${context.params.postId}.json`)
+			.then((data) => ({
+				loadedPost: { ...data, id: context.params.postId },
 			}))
 			.catch((error) => console.log(error))
 	},

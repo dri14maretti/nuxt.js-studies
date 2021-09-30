@@ -4,6 +4,7 @@
 			<v-btn @click="$router.push('/admin/new-post')">
 				Create Post
 			</v-btn>
+			<v-btn @click="onLogout" style="margin-left: 10px"> Logout </v-btn>
 		</section>
 		<section class="existing-posts">
 			<h1>Existing posts</h1>
@@ -13,17 +14,20 @@
 </template>
 
 <script>
-import PostList from '~/components/Posts/PostList'
 export default {
 	layout: 'admin',
-	components: {
-		PostList,
-	},
+	middleware: ['check-auth', 'auth'],
 	computed: {
-        loadedPosts() {
-            return this.$store.getters.loadedPosts
-        }
-    },
+		loadedPosts() {
+			return this.$store.getters.loadedPosts
+		},
+	},
+	methods: {
+		onLogout() {
+			this.$store.dispatch('logout')
+			this.$router.push('/admin/auth')
+		},
+	},
 }
 </script>
 

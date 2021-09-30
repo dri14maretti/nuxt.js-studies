@@ -10,7 +10,10 @@ export default {
 		},
 		meta: [
 			{ charset: 'utf-8' },
-			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{
+				name: 'viewport',
+				content: 'width=device-width, initial-scale=1',
+			},
 			{ hid: 'description', name: 'description', content: '' },
 			{ name: 'format-detection', content: 'telephone=no' },
 		],
@@ -26,10 +29,19 @@ export default {
 	loading: { color: '#fa923f' },
 
 	// Global CSS: https://go.nuxtjs.dev/config-css
-	css: [],
+	css: ['~/assets/styles/main.css'],
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-	plugins: [],
+	plugins: ['~plugins/core-components.js', '~plugins/date-filter.js'],
+
+	env: {
+		fbAPIKey: 'AIzaSyD79xQpxIShYDQ3KcCxbSxsIjdkFCySrsQ',
+	},
+
+	axios: {
+		baseURL: 'https://nuxt-blog-ed505-default-rtdb.firebaseio.com',
+		credentials: false,
+	},
 
 	// Auto import components: https://go.nuxtjs.dev/config-components
 	components: true,
@@ -41,7 +53,7 @@ export default {
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: [],
+	modules: ['@nuxtjs/axios'],
 
 	// Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
 	vuetify: {
@@ -64,4 +76,9 @@ export default {
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {},
+
+	transition: {
+		name: 'fade',
+		mode: 'out-in',
+	},
 }
